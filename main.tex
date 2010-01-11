@@ -12,7 +12,7 @@
 	\maketitle
 	\chapter{Recherche d'une structure}
 		\section{Scénario}
-			L'objectif de la tâche à réaliser sera de trouver des structures particulière sur une molécule.
+			L'objectif de la tâche à réaliser sera de trouver des structures particulières sur une molécule.
 			Pour atteindre cet objectif, le ou les sujets pourront manipuler la molécule dans son ensemble (outil \emph{grab}) et la manipuler atome par atome (outil \emph{tug}).
 			Les structures à identifier seront indiquées à l'aide de photographies.
 			Les photographies pourront être montrées sur l'écran d'un autre ordinateur par exemple.
@@ -69,4 +69,19 @@
 				\end{enumerate}
 			\end{description}
 
+		\section{Analyse}
+			\subsection{Audio}
+				Concernant les enregistrements audio, nous allons nous intéresser au temps de parole.
+				La donnée principale sera donc le temps de parole sur toute la durée de la tâche à réaliser.
+				Pour cela, quelques contraintes:
+				\begin{enumerate}
+					\item Le début de la mesure commence lorsque la structure particulière à rechercher est montrée;
+					\item Un silence de moins de \nombre{0,5}~secondes ne sera pas considéré comme un silence.
+				\end{enumerate}
+				Le temps de parole devrait nous permettre d'observer les points suivants:
+				\begin{enumerate}
+					\item Le pourcentage de parole pendant la tâche;
+					\item Le rapport entre le pourcentage de parole pendant la tâche et le temps de réalisation de la tâche (efficience)\footnote{On ne parle pas d'efficacité ici car il est impossible d'évaluer la qualité de la solution. L'efficacité est une combinaison de l'efficience et de la qualité};
+					\item Le pourcentage comparé de temps de parole de chacun des sujets.
+				\end{enumerate}
 \end{document}
