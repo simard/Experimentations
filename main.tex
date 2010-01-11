@@ -11,63 +11,62 @@
 \begin{document}
 	\maketitle
 	\chapter{Recherche d'une structure}
-		\section{Protocole}
-			\subsection{Scénario}
-				L'objectif de la tâche à réaliser sera de trouver des structures particulière sur une molécule.
-				Pour atteindre cet objectif, le ou les sujets pourront manipuler la molécule dans son ensemble (outil \emph{grab}) et la manipuler atome par atome (outil \emph{tug}).
-				Les structures à identifier seront indiquées à l'aide de photographies.
-				Les photographies pourront être montrées sur l'écran d'un autre ordinateur par exemple.
+		\section{Scénario}
+			L'objectif de la tâche à réaliser sera de trouver des structures particulière sur une molécule.
+			Pour atteindre cet objectif, le ou les sujets pourront manipuler la molécule dans son ensemble (outil \emph{grab}) et la manipuler atome par atome (outil \emph{tug}).
+			Les structures à identifier seront indiquées à l'aide de photographies.
+			Les photographies pourront être montrées sur l'écran d'un autre ordinateur par exemple.
 
-				À chaque lancement d'une simulation, les sujets peuvent explorer la molécule à l'aide de l'outil \emph{grab}.
-				Dès qu'ils estiment être prêts, la photographie est montrée et ils peuvent commencer à déformer la molécule pour trouver la structure en utilisant au choix les outils \emph{grab} et/ou \emph{tug}.
-				Il est possible que la même structure soit plusieurs fois présente sur la même molécule.
-				Dans ce cas, la première structure trouvée sera validée.
+			À chaque lancement d'une simulation, les sujets peuvent explorer la molécule à l'aide de l'outil \emph{grab}.
+			Dès qu'ils estiment être prêts, la photographie est montrée et ils peuvent commencer à déformer la molécule pour trouver la structure en utilisant au choix les outils \emph{grab} et/ou \emph{tug}.
+			Il est possible que la même structure soit plusieurs fois présente sur la même molécule.
+			Dans ce cas, la première structure trouvée sera validée.
 
-				Pour valider la recherche d'une structure, les deux sujets devront attraper un atome de cette structure.
-				Cela devrait permettre de mesurer un temps total d'exécution entre le moment où la photographie est montrée et le moment où la structure est trouvée.
+			Pour valider la recherche d'une structure, les deux sujets devront attraper un atome de cette structure.
+			Cela devrait permettre de mesurer un temps total d'exécution entre le moment où la photographie est montrée et le moment où la structure est trouvée.
 
-				Avant de commencer la tâche, les sujets devront au préalable choisir quelle main ils utiliseront avec quel outil.
-				Sachant qu'il y a trois outils disponibles et deux sujets, un des deux sujets pourra (mais ce n'est pas obligé) utiliser ces deux mains avec deux outils (un \emph{tug} et un \emph{grab} ou deux \emph{tug}).
-				Afin de pouvoir faire ce choix d'association main/outil, une phase d'apprentissage (sur \Nom{trp-cage}) et de découverte des outils laissera une totale liberté pour la manipulation.
+			Avant de commencer la tâche, les sujets devront au préalable choisir quelle main ils utiliseront avec quel outil.
+			Sachant qu'il y a trois outils disponibles et deux sujets, un des deux sujets pourra (mais ce n'est pas obligé) utiliser ces deux mains avec deux outils (un \emph{tug} et un \emph{grab} ou deux \emph{tug}).
+			Afin de pouvoir faire ce choix d'association main/outil, une phase d'apprentissage (sur la molécule \Nom{trp-cage}) et de découverte des outils laissera une totale liberté pour la manipulation.
 
-			\subsection{Constantes}
-				Les constantes sont les invariants de l'environnement d'expérimentation.
-				\begin{description}
-					\item[Visuel] Un affichage unique pour tous les sujets par vidéo-projection.
-					\item[Audio] Aucun retour audio pour ne pas perturber la communication orale entre les sujets.
-					\item[Haptique] Haptique activé pour les interfaces de type \emph{tug} et désactivé pour les interfaces de type \emph{grab}.
-					\item[Interface haptique] 2~interfaces \Omni avec l'option \emph{tug} et 1~interface \Omni avec l'option \emph{grab}.
-					\item[Association main/interface] Pendant l'expérimentation, chaque utilisateur doit toujours utiliser une interface/outil avec la même main.
-					Seule la phase d'apprentissage devra lui permettre de choisir avec quelle main il sera le plus à l'aise.
-					\item[Positionnement] Les sujets sont faces à l'écran et côte à côte dans le cas d'une collaboration.
-				\end{description}
-				
-			\subsection{Variables}
-				Les variables de l'expérimentation.
-				\begin{description}
-					\item[Nombre de personnes] 1~ou 2~personnes;
-					\item[Molécule] Variation sur la taille de la molécule avec \Nom{trp-zipper} puis \Nom{Prion}.
-					\item[Orientation] L'état initial (orientation dans ce cas) de la molécule sera changé à chaque fois.
-				\end{description}
-				On établi ainsi quatre cas différents, l'orientation étant un facteur secondaire destiné à être une variation sur les multiples essais pour une configuration donnée.
-				Pour chaque configuration, on fera passer 5~fois (avec 5~orientations différentes).
-				
-			\subsection{Enregistrements}
-				Les enregistrements sont les valeurs à conserver pendant la durée de l'expérimentation.
-				\begin{description}
-					\item[Position] La position des curseurs de toutes les interfaces haptiques à chaque instant.
-					\item[Force] La force exercée sur les interfaces haptiques par les sujets à chaque instant.
-					\item[Temps] À chaque position ou force enregistrée, on associe le temps courant.
-					\item[Temps total] Le temps total de la réalisation de la tâche.
-					\item[Audio] Enregistrement audio pendant toute la durée de la réalisation de la tâche.
-					\item[Sujet] Différentes informations concernant chaque sujet sont nécessaires:
-					\begin{enumerate}
-						\item Prénom \Nom{Nom}
-						\item Sexe
-						\item Main dominante
-						\item Affinités avec le collaborateur durant l'expérimentation
-						\item Quelle main (gauche ou droite) utilise quelle outil (\emph{tug} ou \emph{grab}) ?
-					\end{enumerate}
-				\end{description}
-				
+		\section{Constantes}
+			Les constantes sont les invariants de l'environnement d'expérimentation.
+			\begin{description}
+				\item[Visuel] Un affichage unique pour tous les sujets par vidéo-projection.
+				\item[Audio] Aucun retour audio pour ne pas perturber la communication orale entre les sujets.
+				\item[Haptique] Haptique activé pour les interfaces de type \emph{tug} et désactivé pour les interfaces de type \emph{grab}.
+				\item[Interface haptique] 2~interfaces \Omni avec l'option \emph{tug} et 1~interface \Omni avec l'option \emph{grab}.
+				\item[Association main/interface] Pendant l'expérimentation, chaque utilisateur doit toujours utiliser une interface/outil avec la même main.
+				Seule la phase d'apprentissage devra lui permettre de choisir avec quelle main il sera le plus à l'aise.
+				\item[Positionnement] Les sujets sont faces à l'écran et côte à côte dans le cas d'une collaboration.
+			\end{description}
+
+		\section{Variables}
+			Les variables de l'expérimentation.
+			\begin{description}
+				\item[Nombre de personnes] 1~ou 2~personnes;
+				\item[Molécule] Variation sur la taille de la molécule avec \Nom{trp-zipper} puis \Nom{Prion}.
+				\item[Orientation] L'état initial (orientation dans ce cas) de la molécule sera changé à chaque fois.
+			\end{description}
+			On établi ainsi quatre cas différents, l'orientation étant un facteur secondaire destiné à être une variation sur les multiples essais pour une configuration donnée.
+			Pour chaque configuration, on fera passer 5~fois (avec 5~orientations différentes).
+
+		\section{Enregistrements}
+			Les enregistrements sont les valeurs à conserver pendant la durée de l'expérimentation.
+			\begin{description}
+				\item[Position] La position des curseurs de toutes les interfaces haptiques à chaque instant.
+				\item[Force] La force exercée sur les interfaces haptiques par les sujets à chaque instant.
+				\item[Temps] À chaque position ou force enregistrée, on associe le temps courant.
+				\item[Temps total] Le temps total de la réalisation de la tâche.
+				\item[Audio] Enregistrement audio pendant toute la durée de la réalisation de la tâche.
+				\item[Sujet] Différentes informations concernant chaque sujet sont nécessaires:
+				\begin{enumerate}
+					\item Prénom \Nom{Nom}
+					\item Sexe
+					\item Main dominante
+					\item Affinités avec le collaborateur durant l'expérimentation
+					\item Quelle main (gauche ou droite) utilise quelle outil (\emph{tug} ou \emph{grab}) ?
+				\end{enumerate}
+			\end{description}
+
 \end{document}
