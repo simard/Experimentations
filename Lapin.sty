@@ -1,0 +1,707 @@
+\NeedsTeXFormat{LaTeX2e}[1999/01/01]
+\ProvidesPackage{Lapin}[2008/09/27]
+
+\makeatletter
+
+%% Declare all options
+% Language options
+\newif\if@english \@englishfalse
+\DeclareOption{english}{\@englishtrue}
+\newif\if@francais \@francaisfalse
+\DeclareOption{francais}{\@francaistrue}
+% To include a  bibliography the document
+\newif\if@biblio \@bibliofalse
+\DeclareOption{biblio}{\@bibliotrue}
+% To include a small bibliography for each chapter
+\newif\if@minibib \@minibibfalse
+\DeclareOption{minibib}{\@minibibtrue\@bibliotrue}
+% To include a mini table of contents for each chapter
+\newif\if@minitoc \@minitocfalse
+\DeclareOption{minitoc}{\@minitoctrue}
+% To include sources codes in the document
+\newif\if@code \@codefalse
+\DeclareOption{code}{\@codetrue}
+% To include PSTricks figure in the document
+\newif\if@pstricks \@pstricksfalse
+\DeclareOption{pstricks}{\@pstrickstrue}
+
+\ProcessOptions
+
+% Give options to packages depending of options
+\if@english
+\PassOptionsToPackage{english}{babel}
+\PassOptionsToPackage{english}{varioref}
+\PassOptionsToPackage{english}{datenumber}
+\PassOptionsToPackage{english}{minitoc}
+\fi
+\if@francais
+\PassOptionsToPackage{frenchb}{babel}
+\PassOptionsToPackage{francais}{varioref}
+\PassOptionsToPackage{french}{datenumber}
+\PassOptionsToPackage{francais}{minitoc}
+\else
+\PassOptionsToPackage{english}{babel}
+\PassOptionsToPackage{english}{varioref}
+\PassOptionsToPackage{english}{datenumber}
+\PassOptionsToPackage{english}{minitoc}
+\fi
+
+% Declare commands if options are not called
+\if@francais
+\else
+\newcommand{\nombre}[1]{$#1$}
+\fi
+\if@minibib
+\else
+\newcommand{\bibliographyunit}[1][]{}
+\fi
+\if@minitoc
+\else
+\newcommand{\dominitoc}{}
+\newcommand{\minitoc}{}
+\fi
+
+%% Loading of the needed packages
+\RequirePackage[postscript]{ucs}
+\RequirePackage[utf8x]{inputenc}
+\RequirePackage{pifont}
+\RequirePackage[T1]{fontenc}
+\RequirePackage{babel}
+\RequirePackage{lmodern}
+\RequirePackage{sectsty}
+\RequirePackage{amsmath}
+\RequirePackage{amsfonts}
+\RequirePackage{latexsym}
+\RequirePackage{xspace}
+\if@biblio
+\RequirePackage[sort,comma,square]{natbib}
+\if@minibib
+\RequirePackage[globalcitecopy,sectionbib]{bibunits}
+\fi
+\fi
+\RequirePackage{varioref}
+\RequirePackage{datenumber}
+\RequirePackage{eurosym}
+\if@code
+\RequirePackage{listings}
+\fi
+\RequirePackage{fancyhdr}
+\RequirePackage{color}
+\RequirePackage{graphicx}
+\RequirePackage{subfig}
+\RequirePackage{multicol}
+\if@pstricks
+\RequirePackage{pst-eucl}
+\RequirePackage{pst-3dplot}
+\RequirePackage{pst-all}
+\RequirePackage{pstricks-add}
+\RequirePackage{pst-blur}
+\fi
+\RequirePackage{caption} % Must be after the 'babel' package
+\RequirePackage{hyperref}
+\if@minitoc
+\RequirePackage{minitoc} % Must be after the 'hyperref' package
+\fi
+
+% Set words depending of the language
+\if@english
+\if@code
+\def\lang@listofcodesname{Sources codes}
+\fi
+\def\lang@listoftodosname{List of todo}
+\def\lang@Todo{Incomplete\xspace}
+\def\lang@Warning{Warning\xspace}
+\def\lang@see{see\xspace}
+\def\lang@See{See\xspace}
+\def\lang@section{section\xspace}
+\def\lang@Section{Section\xspace}
+\def\lang@enumerate{step\xspace}
+\def\lang@Enumerate{Step\xspace}
+\def\lang@figure{figure\xspace}
+\def\lang@Figure{Figure\xspace}
+\def\lang@table{table\xspace}
+\def\lang@Table{Table\xspace}
+\if@code
+\def\lang@code{code\xspace}
+\def\lang@Code{Code\xspace}
+\fi
+\def\lang@equation{equation\xspace}
+\def\lang@Equation{Equation\xspace}
+\fi
+\if@francais
+\if@code
+\def\lang@listofcodesname{Codes sources}
+\fi
+\def\lang@listoftodosname{Parties incomplètes}
+\def\lang@Todo{Incomplet\xspace}
+\def\lang@Warning{Attention\xspace}
+\def\lang@see{voir\xspace}
+\def\lang@See{Voir\xspace}
+\def\lang@section{section\xspace}
+\def\lang@Section{Section\xspace}
+\def\lang@enumerate{étape\xspace}
+\def\lang@Enumerate{Étape\xspace}
+\def\lang@figure{figure\xspace}
+\def\lang@Figure{Figure\xspace}
+\def\lang@table{tableau\xspace}
+\def\lang@Table{Tableau\xspace}
+\if@code
+\def\lang@code{code\xspace}
+\def\lang@Code{Code\xspace}
+\fi
+\def\lang@equation{équation\xspace}
+\def\lang@Equation{Équation\xspace}
+\fi
+
+%% Options for 'hyperref'
+\hypersetup{%
+  pdfnewwindow=true,%
+  colorlinks=true,%
+  breaklinks=true,%
+  pdfhighlight=/P,%
+  pdfcenterwindow=true,%
+  pdfdisplaydoctitle=true,%
+  pdffitwindow=true,%
+	pdfstartview=FitH,%
+	linkcolor=blue,%
+  citecolor=green,%
+  filecolor=magenta,%
+  urlcolor=red%
+  }%
+
+%% Options for 'listings' (default for C language)
+\if@code
+\lstset{%
+	language=C,%
+	% Numerotation of the each line on the left in tiny size
+	numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=5pt,%
+	% A tabulation is equal to 2 spaces
+	tabsize=2,%
+	% Vertical spaces around the caption
+	abovecaptionskip=\medskipamount,belowcaptionskip=\medskipamount,%
+	% Style definitions
+	basicstyle=\ttfamily,%
+	keywordstyle=\color[rgb]{0.25,0.5,0.5}\bfseries,%
+	stringstyle=\color{red},%
+	identifierstyle=,%
+	commentstyle=\color[rgb]{0,0.5,0}\ttfamily,%
+	showstringspaces=false,%
+	% Define a frame around each part of code
+	frameround=tttt,%
+	% Break each too long line with an Carriage Return character
+	prebreak=\unichar{8629}%
+}
+
+% Definition of a language for algorithms (in french)
+\if@english
+\lstdefinelanguage{algo}{%
+	morekeywords={if,then,for,from,to,while,do,begin,end,integer,float,function,return},%
+	sensitive=false}
+\fi
+\if@francais
+\lstdefinelanguage{algo}{%
+	morekeywords={si,alors,pour,allant,de,a,tant,que,faire,debut,fin,entier,reel,fonction,retour},%
+	sensitive=false}
+\fi
+\fi
+
+%% Options for 'graphicx'
+\graphicspath{{images/}}
+\DeclareGraphicsExtensions{.eps,.ps,.pdf,.png,.jpg,.jpeg}
+
+%% Redefine the space of the indentation for the first line of each paragraph
+\setlength{\parindent}{0cm}
+%% Redefine the space between paragraph
+\setlength{\parskip}{1ex plus 0.5ex minus 0.2ex}
+
+%% Modify the design of section
+% Redefine the chapter headers
+\if@pstricks
+\def\@makechapterhead#1{%
+	\addtocontents{tcs}{\protect\addvspace{10\p@}}
+	\addtocontents{tdo}{\protect\addvspace{10\p@}}
+	\vspace*{50\p@}%
+	{\parindent \z@ \raggedleft \normalfont
+	\ifnum \c@secnumdepth >\m@ne
+	\newrgbcolor{Red}{0.734 0 0}
+	\psset{unit=1cm}
+	\begin{pspicture}(-6,-1)(1,1.5)
+		\psframe[linewidth=0,linecolor=Red,fillstyle=solid,fillcolor=Red](-5,-1)(0,0)
+		\psframe[linewidth=0,framearc=.25,linecolor=Red,fillstyle=solid,fillcolor=Red](-1,-1)(1,1)
+		\psframe[linewidth=0,framearc=.25,linecolor=white,fillstyle=solid,fillcolor=white](-6,-0.95)(-1,1)
+		\uput[45](-5,-1){\large\bfseries\sffamily\textcolor{Red}{\@chapapp}}
+		\rput(0,0){\psscaleboxto(1.5,1.5){\white\selectfont\bfseries\sffamily\thechapter}}
+	\end{pspicture}
+	\par\nobreak
+	\fi
+	\interlinepenalty\@M
+	\Huge\bfseries\sffamily #1\par\nobreak
+	\vskip 40\p@
+	}%
+	}
+\fi
+% Modify the fonts for sections
+\allsectionsfont{\sffamily}
+% Modify the fonts for chapters
+\chapterfont{\sffamily}
+% Modify the fonts for the title of mini table of contents (see package 'minitoc')
+\if@minitoc
+\mtcsettitlefont{minitoc}{\large\bfseries\sffamily}
+\fi
+% Modify fonts for titles and labels for figures and tables
+\captionsetup{font={sf},labelfont={bf,sf}}
+
+%%%%%%%%%%%%%%%%%%
+%% NEW COMMANDS %%
+%%%%%%%%%%%%%%%%%%
+
+% To include external TeX files (they must be saved in the 'files' subdirectory)
+\newcommand{\Fichier}[1]{\input{files/#1}}
+
+%% To make annotation on incomplet parts of the document
+% To print dotted line in the list of 'todos' between the title and the page number
+\newcommand{\l@todo}{%
+\@dottedtocline{1}{0.5em}{0.5em}}
+% To create the table of 'todos'
+\newcommand{\listoftodos}{%
+	\chapter*{\lang@listoftodosname}\@starttoc{tdo}}
+% To annotate incomplet part of a document (in-line version)
+\newcommand{\todo}[2][]{%
+  \def\@Un{#1}%
+	\def\@Deux{#2}%
+	\ifx\@Un\@empty%
+	\addcontentsline{tdo}{todo}{\thesection\hspace{1em}\@Deux}%
+	\else%
+	\addcontentsline{tdo}{todo}{\thesection\hspace{1em}\@Un}%
+	\fi
+	\textbf{\textcolor{red}{\@Deux}}}
+% To annotate incomplet part of a document (paragraph version)
+\newenvironment{Todo}[2][]{%
+  \def\@Un{#1}%
+	\def\@Deux{#2}%
+	\definecolor{light-black}{gray}{0.8}
+	\definecolor{light-red}{rgb}{1,0.5,0.5}
+	\ifx\@Un\@empty%
+	\addcontentsline{tdo}{todo}{\bf\thesection\hspace{1em}\@Deux}%
+	\else%
+	\addcontentsline{tdo}{todo}{\bf\thesection\hspace{1em}\@Un}%
+	\fi
+	{\tiny\textcolor{red}{\rule[1ex]{\textwidth}{2pt}}}\\%
+	\textbf{\textcolor{red}{\lang@Todo{} }}\ifx\@Deux\@empty\else\textbf{\textcolor{red}{-- }\textcolor{light-red}{#2}}\fi\\%
+  {\tiny\rule[1ex]{\textwidth}{0.5pt}}%
+	\textcolor{light-black}\bgroup\par}%
+	{\egroup\par\tiny\textcolor{red}{\rule[1ex]{\textwidth}{2pt}}\par}
+
+% To make a paragraphe with 'Warning' mention
+% Draw a Warning sign
+\newenvironment{Warning}[1][]{%
+	\def\@Un{#1}%
+	\par\bf%
+	\if@pstricks
+	\reversemarginpar
+	\marginpar{%
+	\psset{unit=0.075cm}%
+	\begin{pspicture}(-10,10)(10,25)%
+		\psset{blurradius=0.75,blursteps=25}
+		\pspolygon[linewidth=.1,linestyle=solid,linecolor=black,fillstyle=solid,fillcolor=red,linearc=1.5,shadow=true,blur=true](0,-4.5)(8,-4.5)(0,9.5)(-8,-4.5)(0,-4.5)%
+		\pspolygon[linestyle=none,fillstyle=solid,fillcolor=red,linearc=.25](0,-3)(5.5,-3)(0,6.5)(-5.5,-3)(0,-3)%
+		\psclip{%
+		\pspolygon[linestyle=none,fillstyle=solid,fillcolor=white,linearc=.25](0,-3)(5.5,-3)(0,6.5)(-5.5,-3)(0,-3)%
+			}%
+			\pspolygon[linestyle=none,fillstyle=solid,fillcolor=white,shadow=true,blur=true](0.75,8.2272)(-6.75,-4.7272)(-10,-4.7272)(-10,10)(0,10)(1,8.2272)%
+		\endpsclip%
+		\psset{shadow=false,blur=false}%
+		\psline[linewidth=0.1,linecolor=black,linearc=.25,fillstyle=solid,fillcolor=black](0,4)(-1,4)(0,-1.5)(1,4)(0,4)
+		\pscircle[linewidth=0.1,linecolor=black,linearc=.25,fillstyle=solid,fillcolor=black](0,-1.5){0.75}
+	\end{pspicture}%
+	\psset{unit=1cm}%
+	}
+	\fi
+	\ifx\@Un\@empty%
+	\textcolor{red}{\lang@Warning{}}%
+	\else%
+	\textcolor{red}{\@Un}%
+	\fi%
+	\hspace{1em}%
+	}{%
+	\par%
+	}
+
+% To separate authors with equal spaces
+\newcommand{\et}{\hspace{\stretch{1}}}
+
+% To print names in french style (with small capitals)
+\newcommand{\Nom}[1]{%
+	\if@francais%
+	\bsc{#1}%
+	\else%
+	#1%
+	\fi}
+
+% To insere a date
+\newcommand{\Date}[4][]{\def\@IsDayName{l}\def\@Sep{#1}%
+  \ifx\@empty\@Sep%
+  {\setdatenumber{#4}{#3}{#2}\datedate}%
+  \else
+  \ifx\@Sep\@IsDayName%
+  {\setdatenumber{#4}{#3}{#2}\datedayname\ \datedate}%
+  \else%
+  {#2\@Sep#3\@Sep#4}%
+  \fi
+  \fi}
+
+% Table of contents, figures and table (these command insere the an element in order to have the three table in the table of content)
+\newcommand{\TableOfContents}{\newpage\phantomsection\addcontentsline{toc}{chapter}{\contentsname}\tableofcontents}
+\newcommand{\ListOfFigures}{\newpage\phantomsection\addcontentsline{toc}{chapter}{\listfigurename}\listoffigures}
+\newcommand{\ListOfTables}{\newpage\phantomsection\addcontentsline{toc}{chapter}{\listtablename}\listoftables}
+
+%% For the bibliography
+% Set the default style and file for bibliography
+\if@biblio
+	\if@minibib
+		\newcommand{\DefaultBibliography}[2][apalike]{\defaultbibliographystyle{#1}\defaultbibliography{#2}}
+		% Create a mini bibliography at the end of each chapter
+		\newcommand{\minibib}[1][]{\def\@Un{#1}\newpage\phantomsection\addcontentsline{toc}{section}{\bibname}\ifx\@Un\@empty\putbib\else\putbib[#1]\fi}
+	\else
+		\newcommand{\DefaultBibliography}[2][]{}
+		\newcommand{\minibib}[1]{}
+	\fi
+	% Set the style and the file for the bibliography
+	\newcommand{\Bibliography}[2][apalike]{\newpage\phantomsection\addcontentsline{toc}{chapter}{\bibname}\bibliographystyle{#1}\bibliography{#2}}%
+	% Create a command to cite in a text
+	% [a] print the author without squares then the year between squares
+	% [v] print a "(see [ref])"
+	\newcommand{\Bib}[2][]{\def\@Un{#1}\def\@Deux{#2}\def\@Author{a}\def\@See{v}%
+		\ifx\@Un\@Author%
+		\citet{#2}%
+		\else%
+		\ifx\@Un\@See%
+		(\lang@see{} \citep{#2})%
+		\else%
+		\citep{#2}%
+		\fi%
+		\fi}
+\else
+	\newcommand{\Bibliography}[2][]{}
+	\newcommand{\Bib}[2][]{%
+		\if@english%
+			[Undefined reference]\footnote{You may use \texttt{biblio} option in \texttt{Lapin} package.}%
+		\else%
+			\if@francais%
+			\textbf{[Référence manquante]}\footnote{Peut-être devriez-vous utiliser l'option \texttt{biblio} pour le paquetage \texttt{Lapin}.}%
+			\fi%
+		\fi%
+		}
+	\newcommand{\DefaultBibliography}[2][]{}
+	\newcommand{\minibib}[1]{}
+\fi
+
+% To include an image
+\newcommand{\Image}[2][]{\includegraphics[#1]{#2}}
+
+% 'Table' environment to create table floating element
+\newenvironment{Table}[3]%
+	{\def\@Un{#1}\def\@Deux{#2}\def\@Trois{#3}
+\begin{table}[htp]\centering\caption{\@Un}\label{\@Deux}\begin{tabular}{\@Trois}}%
+{\end{tabular}\end{table}}
+
+% 'Figure' environment to create figure floating element
+\newenvironment{Figure}[3][]%
+	{\def\@Un{#1}\def\@Deux{#2}\def\@Trois{#3}%
+	\begin{figure}[htp]\centering}%
+	{\caption[\@Deux]{\@Deux\ifx\@Un\@empty\else ~--~\footnotesize \@Un\fi .}\label{\@Trois}\end{figure}}
+
+% 'FigurePS' environment is like a 'Figure' environment but when you can make PostScript figures with PSTricks.
+\if@pstricks
+\newenvironment{FigurePS}[4][]%
+	{\def\@Un{#1}\def\@Deux{#2}\def\@Trois{#3}%
+	\begin{figure}[htp]\centering\begin{pspicture}\psset{unit=1cm}\SpecialCoor #4}%
+	{\end{pspicture}\psset{unit=1}\caption[\@Deux]{\@Deux\ifx\@Un\@empty\else ~--~\footnotesize \@Un\fi .}\label{\@Trois}\end{figure}}
+\fi
+
+% Redefine an environment for the subfigures
+\newbox\sf@box 
+\newenvironment{SubFloat}[2][]% 
+	{%
+		\def\sf@one{#1}% 
+		\def\sf@two{#2}% 
+		\setbox\sf@box\hbox%
+		\bgroup%
+	}{%
+		\egroup%
+		\ifx\@empty\sf@two\@empty\relax%
+			\def\sf@two{\@empty}%
+		\fi%
+		\ifx\@empty\sf@one\@empty\relax%
+			\subfloat[\sf@two]{\box\sf@box}% 
+		\else%
+			\subfloat[\sf@one][\sf@two]{\box\sf@box}% 
+		\fi%
+	}
+
+% 'SubFigure' environment to create subfigures.
+% Can only be found in a 'Figure' environment
+\newenvironment{SubFigure}[2]%
+	{\begin{SubFloat}{\label{#2}#1}}%
+	{\end{SubFloat}}
+
+% 'SubFigurePS' environment to create subfigure in PostScript with PSTricks.
+% Can only be found in a 'Figure' environment
+\if@pstricks
+\newenvironment{SubFigurePS}[3]%
+	{\begin{SubFloat}{\label{#2}#1}\begin{pspicture}\SpecialCoor #3}%
+	{\end{pspicture}\end{SubFloat}}
+\fi
+
+%% Commands to include sources codes in a document
+% Create the table of codes
+\if@code
+\newcommand{\listofcodes}{%
+	\chapter*{\lang@listofcodesname}\@starttoc{tcs}}
+% To print dotted line in the list of 'codes' between the title and the page number
+\newcommand{\l@code}{%
+\@dottedtocline{1}{0.5em}{0.5em}}
+% Redefine the label for the codes
+\renewcommand{\lstlistingname}{\lang@Code}
+% To include a source code with an extern file (which must be in the 'files' subdirectory)
+\newcommand{\FichierCode}[4][]{%
+\def\@Un{#1}\def\@Deux{#2}\def\@Trois{#3}\def\@Quatre{#4}%
+	\lstset{%
+	frame=single,%
+	breaklines=true%
+	}%
+	\textcolor{black}{\textnormal{%
+	\ifx\@Un\@empty%
+	\lstinputlisting[caption=#3,label=#4]{files/#2}%
+	\else%
+	\lstinputlisting[caption=#3,label=#4,#1]{files/#2}%
+	\fi}}%
+	\addcontentsline{tcs}{code}{\thelstlisting\hspace{1em}#3}%
+	}
+% To include source code (in-line version)
+\newcommand{\code}[1][]{%
+	\lstset{%
+	frame=none,%
+	backgroundcolor=\color{white},%
+	breaklines=false%
+	}%
+	\leavevmode\bgroup% \hbox\bgroup --> \bgroup
+	\def\lst@boxpos{b}%
+	\lsthk@PreSet\lstset{flexiblecolumns,#1}%
+	\lsthk@TextStyle%
+	\@ifnextchar\bgroup{\afterassignment\lst@InlineG \let\@let@token}%
+	\lstinline@}
+% To include source code (paragraph version)
+% This is a numbered version so it will appear in the table of codes
+\lstnewenvironment{Code}[4][]%
+	{\def\@Un{#1}%
+	\lstset{%
+	frame=single,%
+	breaklines=true%
+	}%
+	\ifx\@Un\@empty%
+	\lstset{caption={#2},label=#3}%
+	\else%
+	\lstset{#1,caption={#2},label=#3}%
+	\fi%
+	\textcolor{black}\bgroup\textnormal\bgroup%
+	\lst@TestEOLChar{#4}\csname\@lst @SetFirstNumber\endcsname}%
+	{\csname\@lst @SaveFirstNumber\endcsname%
+	\egroup\egroup%
+	\addcontentsline{tcs}{code}{\thelstlisting\hspace{1em}#2}%
+	}
+% To include source code (paragraph version)
+% This is a non-numbered version so it will appear in the table of codes
+\lstnewenvironment{Code*}[1][]%
+	{\def\@Un{#1}%
+	\lstset{%
+	frame=single,%
+	breaklines=true%
+	}%
+	\ifx\@Un\@empty%
+	\lstset{numbers=none}%
+	\else%
+	\lstset{numbers=none,#1}%
+	\fi%
+	\textcolor{black}\bgroup\textnormal\bgroup%
+	\lst@TestEOLChar{#1}\csname\@lst @SetFirstNumber\endcsname}%
+	{\csname\@lst @SaveFirstNumber\endcsname%
+	\egroup\egroup}
+\fi
+
+% 'Equation' environment
+\newenvironment{Equation}[1][]%
+	{\def\@Un{#1}%
+	\par\begin{equation}%
+		\ifx%
+		\@Un\@empty%
+		\else%
+		\label{#1}\fi}%
+  {\end{equation}\par}
+\newenvironment{Equation*}%
+	{\par\begin{equation*}}%
+	{\end{equation*}}
+
+%% Commands to create reference
+%% The optionnal argument which could only be 'v' is to include '(see Fig. 1)' instead of 'Fig. 1'.
+% To create a reference on a part
+\newcommand{\ParRef}[2][]{\def\@Un{#1}\def\@Deux{#2}\def\@See{v}\def\@Brut{b}%
+  \ifx\@Un\@See%
+  (\lang@see{} \partname~\vref{#2})%
+  \else%
+	\ifx\@Un\@Brut%
+	\ref{#2}%
+	\else%
+  \partname~\vref{#2}%
+	\fi%
+  \fi}
+% To create a reference on a chapter
+\newcommand{\ChaRef}[2][]{\def\@Un{#1}\def\@Deux{#2}\def\@See{v}\def\@Brut{b}%
+  \ifx\@Un\@See%
+  (\lang@see{} \chaptername~\vref{#2})%
+  \else%
+	\ifx\@Un\@Brut%
+	\ref{#2}%
+	\else%
+  \chaptername~\vref{#2}%
+	\fi%
+  \fi}
+% To create a reference on a section
+\newcommand{\SecRef}[2][]{\def\@Un{#1}\def\@Deux{#2}\def\@See{v}\def\@Brut{b}%
+  \ifx\@Un\@See%
+  (\lang@see{} \lang@section{}~\vref{#2})%
+  \else%
+	\ifx\@Un\@Brut%
+	\ref{#2}%
+	\else%
+  \lang@section{}~\vref{#2}%
+	\fi%
+  \fi}
+% To create a reference on a subsection
+\newcommand{\SseRef}[2][]{\def\@Un{#1}\def\@Deux{#2}\def\@See{v}\def\@Brut{b}%
+  \ifx\@Un\@See%
+  (\lang@see{} \lang@section{}~\vref{#2})%
+  \else%
+	\ifx\@Un\@Brut%
+	\ref{#2}%
+	\else%
+  \lang@section{}~\vref{#2}%
+	\fi%
+  \fi}
+% To create a reference on a subsubsection
+\newcommand{\SssRef}[2][]{\def\@Un{#1}\def\@Deux{#2}\def\@See{v}\def\@Brut{b}%
+  \ifx\@Un\@See%
+  (\lang@see{} \lang@section{}~\vref{#2})%
+  \else%
+	\ifx\@Un\@Brut%
+	\ref{#2}%
+	\else%
+  \lang@section{}~\vref{#2}%
+	\fi%
+  \fi}
+% To create a reference on a enumerate step
+\newcommand{\EnuRef}[2][]{\def\@Un{#1}\def\@Deux{#2}\def\@See{v}\def\@Brut{b}%
+  \ifx\@Un\@See%
+  (\lang@see{} \lang@enumerate{}~\vref{#2})%
+  \else%
+	\ifx\@Un\@Brut%
+	\ref{#2}%
+	\else%
+  \lang@enumerate{}~\vref{#2}%
+	\fi%
+  \fi}
+% To create a reference on a figure
+\newcommand{\FigRef}[2][]{\def\@Un{#1}\def\@Deux{#2}\def\@See{v}\def\@Brut{b}%
+	\renewcommand{\figurename}{{\sffamily{\lang@Figure}}\xspace}%
+  \ifx\@Un\@See%
+  (\lang@see{} \figurename~\vref{#2})%
+  \else%
+	\ifx\@Un\@Brut%
+	\ref{#2}%
+	\else%
+  \figurename~\vref{#2}%
+	\fi%
+  \fi}
+% To create a reference on a table
+\newcommand{\TabRef}[2][]{\def\@Un{#1}\def\@Deux{#2}\def\@See{v}\def\@Brut{b}%
+	\renewcommand{\tablename}{{\sffamily{\lang@Table}}\xspace}%
+  \ifx\@Un\@See%
+  (\lang@see{} \tablename~\vref{#2})%
+  \else%
+	\ifx\@Un\@Brut%
+	\ref{#2}%
+	\else%
+  \tablename~\vref{#2}%
+	\fi%
+  \fi}
+% To create a reference on a code
+\if@code
+\newcommand{\CodRef}[2][]{\def\@Un{#1}\def\@Deux{#2}\def\@See{v}\def\@Brut{b}%
+	\renewcommand{\lstlistingname}{{\sffamily{\lang@Code}}\xspace}%
+  \ifx\@Un\@See%
+	(\lang@see{} \lstlistingname~\vref{#2})%
+  \else%
+	\ifx\@Un\@Brut%
+	\ref{#2}%
+	\else%
+  \lstlistingname~\vref{#2}%
+	\fi%
+  \fi}
+\fi
+% To create a reference on an equation
+\newcommand{\EqRef}[2][]{\def\@Un{#1}\def\@Deux{#2}\def\@See{v}\def\@Brut{b}%
+  \ifx\@Un\@See%
+	(\lang@see{} \lang@equation{}~(\ref*{#2})))%
+  \else%
+	\ifx\@Un\@Brut%
+	\ref{#2}%
+	\else%
+	\lang@equation{}~(\vref*{#2}))%
+	\fi%
+  \fi}
+% To create a reference on a foot note
+\DeclareRobustCommand\vreffno{%
+	\@ifstar{%
+	\let\vref@space\relax\vr@ffno%
+	}{%
+	\let\vref@space\nobreakspace\vr@ffno}%
+	}
+\def\vr@ffno#1{%
+	\leavevmode\unskip\vref@space%
+	\textsuperscript{\ref{#1}\vpageref[\unskip]{#1}}%
+	}
+\newcommand{\FnoRef}[1]{\def\@Un{#1}\vreffno*{\@Un}}
+
+%% Various commands
+% For mathematics
+\newcommand{\PI}{3.141592653589793 }
+\newcommand{\E}{2.718281828459045 }
+\newcommand{\Exp}[1]{e^{#1}}
+\newcommand{\Expf}[1]{\exp{\left[#1\right]}}
+\renewcommand{\Vec}[2][]{\def\@Un{#1}\def\@Deux{#2}\def\@Simple{s}%
+  \ifx\@Simple\@Un%
+  \overrightarrow{\mathbf{#2}}%
+  \else%
+  \overrightarrow{#2}%
+  \fi}
+\newcommand{\Module}[1]{\left| #1 \right|}
+\newcommand{\Norm}[1]{\left\| #1 \right\|}
+\newcommand{\Gradient}{\vec{\nabla}}
+\newcommand{\Parallele}{\,/\!/\,}
+\newcommand{\Implique}{\quad\Rightarrow\quad}
+% For graphics
+\newcommand{\DataPlot}[2][]{\fileplot[#1]{files/#2}}
+\newcommand{\DataPlotThreeD}[2][]{\fileplotThreeD[#1]{files/#2}}
+% Others
+\newcommand{\Registered}{\textregistered\xspace}
+\newcommand{\Trademark}{\texttrademark\xspace}
+\newcommand{\ie}{\emph{i.e.}\xspace}
+
+\makeatother
+
+% Default value for author and date
+\author{Jean \Nom{Simard}}
+\date{\today}
+
+% End of package
+\endinput
